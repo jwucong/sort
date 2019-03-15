@@ -47,10 +47,15 @@
   Dom.prototype.push = [].push;
   Dom.prototype.splice = [].splice;
 
-  Dom.prototype.get = function (n) {
-    if (isType(+n, 'number') && !isNaN(+n)) {
+  Dom.prototype.get = function (index) {
+    var n = +index;
+    if (isType(n, 'number') && !isNaN(n)) {
       return this[n < 0 ? this.length + n : n];
     }
+  }
+
+  Dom.prototype.pick = function (n) {
+    return dom(this.get(n))
   }
 
   Dom.prototype.each = function (cb) {
