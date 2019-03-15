@@ -24,11 +24,29 @@
   var array = [5, 1, 4, 2, 8];
 
   var t1 = Date.now();
-  var result = radixSort(createArray(10000));
+  var result = insertSort(createArray(10000));
   // var result = quickSort(array);
   console.log('delta: %o', Date.now() - t1)
 
   console.log('result: %o', result)
+  console.log(Math.log2(8))
+
+  function insertSort() {
+    var size = array.length, current;
+    for (var i = 1; i < size; i++) {
+      current = array[i]
+      for (var j = i; j >= 0; j--) {
+        if(array[j - 1] > current) {
+          array[j] = array[j - 1];
+        } else {
+          array[j] = current;
+          break;
+        }
+        console.log(j)
+      }
+    }
+    return array;
+  }
 
 
 </script>
