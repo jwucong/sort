@@ -1,204 +1,171 @@
-//index.js
-//获取应用实例
-const app = getApp()
-
-//计数器
-var interval = null;
-
-//值越大旋转时间越长  即旋转速度
-var intime = 50;
-
-Page({
-  data: {
-    color: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
-    //9张奖品图片
-    images: ['/images/item.png', '/images/item1.png', '/images/item.png', '/images/item1.png', '/images/item.png', '/images/item1.png', '/images/item.png', '/images/item1.png', '/images/item.png'],
-    btnconfirm: '/images/dianjichoujiang.png',
-    clickLuck:'clickLuck',
-    luckPosition:0,
-  },
-
-  onLoad:function(){
-    this.loadAnimation();
-  },
-
-  input:function(e){
-    var data = e.detail.value;
-    this.setData({
-      luckPosition: data
-    })
-  },
-
-
-  //点击抽奖按钮
-  clickLuck:function(){
-
-    var e = this;
-
-    //判断中奖位置格式
-    if (e.data.luckPosition == null || isNaN(e.data.luckPosition) || e.data.luckPosition>7){
-      wx.showModal({
-        title: '提示',
-        content: '请填写正确数值',
-        showCancel:false,
-      })
-      return;
+;(function () {
+  
+  var LotteryMachine = function (options) {
+    var defaults = {
+      speed: 100,
+      cycles: 5,
+      track: [0, 1, 2, 5, 8, 7, 6, 3],
+      btnText: '点击抽奖',
+      activeClass: 'active'
     }
-
-
-
-    //设置按钮不可点击
-    e.setData({
-      btnconfirm:'/images/dianjichoujiangd.png',
-      clickLuck:'',
-    })
-    //清空计时器
-    clearInterval(interval);
-    var index = 0;
-    console.log(e.data.color[0]);
-    //循环设置每一项的透明度
-    interval = setInterval(function () {
-      if (index > 7) {
-        index = 0;
-        e.data.color[7] = 0.5
-      } else if (index != 0) {
-        e.data.color[index - 1] = 0.5
-      }
-      e.data.color[index] = 1
-      e.setData({
-        color: e.data.color,
-      })
-      index++;
-    }, intime);
-
-    //模拟网络请求时间  设为两秒
-    var stoptime = 2000;
-    setTimeout(function () {
-      e.stop(e.data.luckPosition);
-    }, stoptime)
-
-  },
-
-  //也可以写成点击按钮停止抽奖
-  // clickStop:function(){
-  //   var stoptime = 2000;
-  //   setTimeout(function () {
-  //     e.stop(1);
-  //   }, stoptime)
-  // },
-
-  stop: function (which){
-    var e = this;
-    //清空计数器
-    clearInterval(interval);
-    //初始化当前位置
-    var current = -1;
-    var color = e.data.color;
-    for (var i = 0; i < color.length; i++) {
-      if (color[i] == 1) {
-        current = i;
-      }
-    }
-    //下标从1开始
-    var index = current + 1;
-
-    e.stopLuck(which, index, intime, 10);
-  },
-
-
-  /**
-   * which:中奖位置
-   * index:当前位置
-   * time：时间标记
-   * splittime：每次增加的时间 值越大减速越快
-   */
-  stopLuck: function (which, index,time,splittime){
-    var e = this;
-    //值越大出现中奖结果后减速时间越长
-    var color = e.data.color;
-    setTimeout(function () {
-      //重置前一个位置
-      if (index > 7) {
-        index = 0;
-        color[7] = 0.5
-      } else if (index != 0) {
-        color[index - 1] = 0.5
-      }
-      //当前位置为选中状态
-      color[index] = 1
-      e.setData({
-        color: color,
-      })
-      //如果旋转时间过短或者当前位置不等于中奖位置则递归执行
-      //直到旋转至中奖位置
-      if (time < 400 || index != which){
-        //越来越慢
-        splittime++;
-        time += splittime;
-        //当前位置+1
-        index++;
-        e.stopLuck(which, index, time, splittime);
-      }else{
-        //1秒后显示弹窗
-        setTimeout(function () {
-          if (which == 1 || which == 3 || which == 5 || which == 7) {
-            //中奖
-            wx.showModal({
-              title: '提示',
-              content: '恭喜中奖',
-              showCancel: false,
-              success: function (res) {
-                if (res.confirm) {
-                  //设置按钮可以点击
-                  e.setData({
-                    btnconfirm: '/images/dianjichoujiang.png',
-                    clickLuck: 'clickLuck',
-                  })
-                  e.loadAnimation();
-                }
-              }
-            })
-          } else {
-            //中奖
-            wx.showModal({
-              title: '提示',
-              content: '很遗憾未中奖',
-              showCancel: false,
-              success:function(res){
-                if(res.confirm){
-                  //设置按钮可以点击
-                  e.setData({
-                    btnconfirm: '/images/dianjichoujiang.png',
-                    clickLuck: 'clickLuck',
-                  })
-                  e.loadAnimation();
-                }
-              }
-            })
-          }
-        }, 1000);
-      }
-    }, time);
-    console.log(time);
-  },
-  //进入页面时缓慢切换
-  loadAnimation:function (){
-    var e = this;
-    var index = 0;
-    // if (interval == null){
-    interval = setInterval(function () {
-      if (index > 7) {
-        index = 0;
-        e.data.color[7] = 0.5
-      } else if (index != 0) {
-        e.data.color[index - 1] = 0.5
-      }
-      e.data.color[index] = 1
-      e.setData({
-        color: e.data.color,
-      })
-      index++;
-    }, 1000);
-    // }
+    this.options = options || defaults;
+    this.cells = null;
+    this.btn = null;
+    this.winner = null;
+    this.times = 0;
+    this.current = 0;
+    this.prev = null;
+    this.running = false;
   }
-})
+  
+  LotteryMachine.prototype.init = function () {
+    var cells = [].slice.call(document.querySelectorAll('.cell'));
+    this.cells = cells;
+    this.btn = cells[4];
+    this.btn.addEventListener('touchstart', this.run.bind(this), false);
+    return this;
+  }
+  LotteryMachine.prototype.getTimes = function () {
+    return this.times;
+  }
+  LotteryMachine.prototype.setTimes = function (value) {
+    this.times = value / 1 || 0;
+    return this;
+  };
+  LotteryMachine.prototype.getWinner = function () {
+    return this.winner;
+  }
+  LotteryMachine.prototype.setWinner = function (value) {
+    this.winner = value / 1 || 0;
+    return this;
+  }
+  LotteryMachine.prototype.run = function () {
+    console.log('run')
+    var
+      ops = this.options,
+      track = ops.track;
+    if (!this.times || this.running || track.indexOf(this.winner) < 0) {
+      console.group('run false')
+      console.log('times: %o', this.times)
+      console.log('running: %o', this.running)
+      console.log('winner: %o', this.winner)
+      console.groupEnd()
+      return false;
+    }
+    console.group('run')
+    this.running = true;
+    var
+      that = this,
+      cells = this.cells,
+      activeClass = ops.activeClass,
+      size = track.length,
+      cycles = ops.cycles,
+      speed = ops.speed,
+      rings = 0,
+      timer = null,
+      slowIndex = random(0, size - 1),
+      delta = 20,
+      k = 0
+    
+    console.log('winner: %o', this.getWinner())
+    var turn = function () {
+      console.group('turn')
+      var
+        current = that.current,
+        cellIndex = track[current],
+        activeCell = cells[cellIndex]
+      console.log('rings: %o', rings)
+      console.log('cycles: %o', cycles)
+      console.log('slowIndex: %o', slowIndex)
+      console.log('cellIndex: %o', cellIndex)
+      console.log('activeCell: %o', activeCell)
+      console.log('activeCell: %o', activeCell)
+      cells.forEach(function (item) {
+        if (item !== activeCell) {
+          removeClass(item, activeClass);
+        }
+      })
+      addClass(activeCell, activeClass);
+      if (rings >= cycles && cellIndex === that.winner) {
+        clearTimeout(timer);
+        rings = 0;
+        that.running = false;
+        that.winner = null;
+        that.prev = that.current;
+        that.times = --that.times < 0 ? 0 : that.times;
+      } else {
+        that.current = ++current < size ? current : 0;
+        if (that.prev === null) {
+          if (that.current === size - 1) {
+            rings++
+          }
+        } else {
+          if (that.current === that.prev) {
+            rings++
+          }
+        }
+        if(rings === 0) {
+          speed -= 6
+        } else if (rings >= Math.floor(cycles - 1)) {
+          speed += delta + this.current * 2.4
+        }
+        setTimeout(turn.bind(this), speed)
+      }
+      console.log('speed: %o', speed);
+      console.groupEnd()
+    }
+    turn.call(this);
+    console.groupEnd()
+    return this;
+  }
+  
+  LotteryMachine.prototype.reset = function (value) {
+    this.winner = null;
+    this.times = 0;
+    this.current = 0;
+    this.prev = null;
+    this.running = false;
+    return this;
+  }
+  
+  LotteryMachine.prototype.destory = function () {
+    this.reset();
+    this.btn.removeEventListener('click', this.run)
+    this.cells = null;
+    this.btn = null;
+    return this;
+  }
+  
+  function createCells() {
+  
+  }
+  
+  function createLights() {
+  
+  }
+  
+  function easeInOut(t, b, c, d) {
+    if ((t /= d / 2) < 1) return c / 2 * t * t * t * t + b;
+    return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
+  }
+  
+  function addClass(el, classnName) {
+    if (!el.classList.contains(classnName)) {
+      el.classList.add(classnName)
+    }
+  }
+  
+  function removeClass(el, classnName) {
+    if (el.classList.contains(classnName)) {
+      el.classList.remove(classnName)
+    }
+  }
+  
+  function random(min, max) {
+    return Math.round(Math.random() * (max - min) + min);
+  }
+  
+  window.LotteryMachine = LotteryMachine;
+  
+  
+})();
