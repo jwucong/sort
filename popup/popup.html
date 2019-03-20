@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Title</title>
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    .popup-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 900;
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      background-color: transparent;
+      user-select: none;
+    }
+
+    .popup-container .popup-mask {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .popup-container .popup-wrap {
+      position: relative;
+      top: 40%;
+      z-index: 2;
+      display: block;
+      box-sizing: border-box;
+      width: 280px;
+      margin: 0 auto;
+      /*padding: 15px;*/
+      border-radius: 6px;
+      background-color: #fff;
+      box-shadow: 0 0 15px rgba(9, 9, 9, 0.5);
+      transform: translateY(-50%);
+    }
+
+    .popup-container .popup-body {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 100px;
+      max-height: 300px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .popup-container .popup-icon {
+      display: block;
+      width: 95px;
+      height: 95px;
+      margin: 0 auto 15px;
+      background: transparent center center / 100% auto no-repeat;
+    }
+
+    .popup-container .popup-icon.success-red {
+      background-image: url("http://i0.um.tcl.com/icon-wepage-ok.png");
+    }
+
+    .popup-container .popup-content {
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .popup-countdown {
+      font-size: 12px;
+      color: #999;
+      margin: 15px auto 0;
+    }
+
+    .popup-body {
+      position: relative;
+      display: block;
+      box-sizing: border-box;
+      padding: 15px;
+    }
+
+    .popup-header {
+      position: relative;
+      box-sizing: border-box;
+      display: block;
+      width: 100%;
+      height: 50px;
+      padding: 0 15px;
+      line-height: 50px;
+      text-align: left;
+    }
+
+    .popup-header:after {
+      content: '';
+      width: 200%;
+      height: 200%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-bottom: 1px solid #bfbfbf;
+      transform: scale(0.5, 0.5);
+      transform-origin: top left;
+    }
+
+    .popup-footer {
+      position: relative;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      width: 100%;
+      height: 50px;
+      line-height: 50px;
+    }
+
+    .popup-footer:before {
+      content: '';
+      width: 200%;
+      height: 200%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-top: 1px solid #bfbfbf;
+      transform: scale(0.5, 0.5);
+      transform-origin: top left;
+    }
+
+    .popup-footer .popup-btn {
+      position: relative;
+      box-sizing: border-box;
+      flex: 0 0 100%;
+      text-decoration: none;
+      font-size: 16px;
+      color: dodgerblue;
+      text-align: center;
+    }
+    .popup-footer .popup-btn:after {
+      content: '';
+      width: 200%;
+      height: 200%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      border-right: 1px solid #bfbfbf;
+      transform: scale(0.5, 0.5);
+      transform-origin: top left;
+    }
+    .popup-footer .popup-btn:last-child:after {
+      display: none;
+    }
+
+  </style>
+</head>
+<body>
+
+<!--<div id="pop" class="popup-container">-->
+  <!--<div class="popup-mask"></div>-->
+  <!--<div class="popup-wrap">-->
+    <!--<div class="popup-header">提示</div>-->
+    <!--<div class="popup-body">-->
+      <!--<div class="popup-icon success-red"></div>-->
+      <!--<div class="popup-content">肺癌纷纷</div>-->
+      <!--<div class="popup-countdown">弹窗在3秒后自动关闭</div>-->
+    <!--</div>-->
+    <!--<div class="popup-footer">-->
+      <!--<a href="javascript:;" class="popup-btn">确定</a>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+
+
+<script>
+
+  var icons = {
+    successRed: 'http://i0.um.tcl.com/icon-wepage-ok.png',
+    successGreen: 'http://i0.um.tcl.com/icon-wepage-ok2.png',
+    timeEnd: 'http://i0.um.tcl.com/icon-wepage-time.png',
+    emptyShoppingBag: 'http://i0.um.tcl.com/icon-wepage-none.png',
+    tclLogo: 'http://i0.um.tcl.com/icon-wepage-no-avatar.png',
+    questionMark: 'http://i0.um.tcl.com/icon-wepage-wenhao.png'
+  }
+
+
+  var html0 = `
+  <div id="pop" class="popup-container">
+  <div class="popup-mask"></div>
+  <div class="popup-wrap">
+    <div class="popup-header">提示</div>
+    <div class="popup-body">
+      <div class="popup-icon success-red"></div>
+      <div class="popup-content">肺癌纷纷</div>
+      <div class="popup-countdown">弹窗在3秒后自动关闭</div>
+    </div>
+    <div class="popup-footer"></div>
+  </div>
+</div>
+  `
+
+
+  /**
+   * 1. 有图标
+   * 2. 有文字
+   * 3. 直接html
+   * 4. 自动倒计时关闭
+   * 5. 手动按钮关闭
+   * 6. 是否需要遮罩层
+   * 7. 点击遮罩层是否关闭
+   */
+
+  var popup = (function () {
+    var node = null;
+    return function (options) {
+      return node || (node = new Popup(options))
+    }
+  })()
+
+  function Popup(options) {
+    var html = html0  // || document.getElementById('pop').outerHTML;
+    var div = document.createElement('div');
+    div.innerHTML = html;
+    var container = div.querySelector('.popup-container')
+    var mask = container.querySelector('.popup-mask')
+    var wrap = container.querySelector('.popup-wrap')
+    var header = container.querySelector('.popup-header')
+    var body = container.querySelector('.popup-body')
+    var icon = container.querySelector('.popup-icon')
+    var content = container.querySelector('.popup-content')
+    var countdown = container.querySelector('.popup-countdown')
+    var footer = container.querySelector('.popup-footer')
+    console.log(container)
+    this.container = container
+    this.mask = mask
+    this.wrap = wrap
+    this.header = header
+    this.body = body
+    this.icon = icon
+    this.content = content
+    this.countdown = countdown
+    this.footer = footer
+    this.container.style.display = 'none'
+    document.body.appendChild(this.container)
+  }
+
+  Popup.prototype.init = function (options) {
+    var html = document.getElementById('pop').outerHTML;
+    var div = document.createElement('div');
+    div.innerHTML = html;
+
+  }
+
+  Popup.prototype.show = function (options) {
+    var
+      that = this,
+      title = options.title,
+      icon = options.iconSrc,
+      content = options.content,
+      countdown = options.countdown,
+      btns = options.btns,
+      timerId = null
+
+    text(this.header, title)
+    text(this.content, content)
+
+    if(typeof icon === 'string' && icon.toString().trim()) {
+      this.icon.style.backgroundImage = 'url(' + icon.trim() + ')'
+      this.icon.style.display = 'block'
+    } else {
+      this.icon.style.display = 'none'
+      this.icon.style.backgroundImage = 'url()'
+    }
+
+    if(is(btns, 'array') && btns.length) {
+      var fragment = document.createDocumentFragment()
+      var btnWidth = (100 / btns.length).toFixed(4) + '%'
+      btns.forEach(function(item, index) {
+        var a = document.createElement('a')
+        a.innerText = item.text
+        a.classList.add('popup-btn')
+        a.style.width = btnWidth
+        a.style.flexBasis = btnWidth
+        a.setAttribute('data-index', index)
+        a.setAttribute('href', 'javascript:;')
+        a.addEventListener('touchstart', function() {
+          console.log('click')
+          item.callback.call(that)
+        }, false)
+        fragment.appendChild(a)
+      })
+      this.footer.appendChild(fragment)
+      this.footer.style.display = 'flex'
+    } else {
+      this.footer.style.display = 'none'
+      this.footer.innerHTML = ''
+    }
+
+    if(is(countdown, 'number') && countdown > 0) {
+      var second = Math.ceil(countdown / 1000)
+      this.countdown.innerText = '弹窗将在' + second + '秒后自动关闭'
+      timerId = setInterval(function() {
+          if(--second <= 0) {
+            clearInterval(timerId)
+            that.hide()
+          } else {
+            that.countdown.innerText = '弹窗将在' + second + '秒后自动关闭'
+          }
+      }, 1000);
+    } else {
+      this.countdown.style.display = 'none'
+      this.countdown.innerText = ''
+    }
+
+    this.container.style.display = 'block'
+  }
+
+  Popup.prototype.hide = function (options) {
+    this.container.style.display = 'none'
+    return this;
+  }
+
+
+  function text(el, text) {
+      if(is(text, 'string') && text.toString().trim()) {
+        el.innerText = text.trim()
+        el.style.display = 'block'
+      } else {
+        el.style.display = 'none'
+        el.innerText = ''
+      }
+  }
+
+  function is(value, type) {
+      var c = {}.toString.call(value).slice(8, -1);
+      return typeof type === 'string' ? type.toLowerCase() === c.toLowerCase() : c;
+  }
+
+
+
+  var p = popup()
+  var p2 = popup()
+  console.log(popup)
+  console.log(p === p2)
+  p2.show({
+    title: '214',
+    iconSrc: icons.successRed,
+    content: '疯狂麻烦昆明可可免费看如果快马溘然',
+    countdown: 5000,
+    // btns: [{
+    //   text: '确定',
+    //   callback: function() {
+    //       console.log(this)
+    //   },
+    // },{
+    //   text: '取消',
+    //   callback: function() {
+    //     this.hide()
+    //   },
+    // }]
+  })
+
+
+</script>
+</body>
+</html>
