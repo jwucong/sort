@@ -1,0 +1,125 @@
+.prizes-list-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  background-color: #eee;
+  transform: translateX(100%);
+  transition: transform 0.5s; }
+  .prizes-list-panel.show {
+    transform: translateX(0); }
+  .prizes-list-panel .panel-list,
+  .prizes-list-panel .prizes-panel {
+    margin-bottom: 50px; }
+    .prizes-list-panel .panel-list:last-child,
+    .prizes-list-panel .prizes-panel:last-child {
+      margin-bottom: 0; }
+  .prizes-list-panel .panel-title {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #fff;
+    font-size: 14px;
+    text-align: left; }
+  .prizes-list-panel .crescent {
+    position: relative;
+    overflow: hidden; }
+    .prizes-list-panel .crescent:before, .prizes-list-panel .crescent:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      background-color: #eee;
+      border-radius: 50%;
+      transform: translate(-50%, -50%); }
+    .prizes-list-panel .crescent:before {
+      left: 0; }
+    .prizes-list-panel .crescent:after {
+      left: 100%; }
+  .prizes-list-panel .code {
+    position: relative;
+    box-sizing: border-box;
+    margin: 12px;
+    border-radius: 4px;
+    font-size: 30px;
+    color: #666;
+    line-height: 100px;
+    text-align: center;
+    background-color: #fff; }
+  .prizes-list-panel .prize {
+    position: relative;
+    margin: 12px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff; }
+    .prizes-list-panel .prize:last-child {
+      margin-bottom: 0; }
+    .prizes-list-panel .prize .prize-info {
+      position: relative;
+      display: flex;
+      justify-content: flex-start;
+      box-sizing: border-box;
+      align-item: center;
+      padding-bottom: 10px; }
+      .prizes-list-panel .prize .prize-info:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 200%;
+        box-sizing: border-box;
+        border-bottom: 1px solid #eee;
+        transform: scale(0.5, 0.5);
+        transform-origin: top left; }
+    .prizes-list-panel .prize .prize-pic {
+      flex: 0 0 60px;
+      width: 60px;
+      height: 60px;
+      margin-right: 12px;
+      background: transparent center center / 100% auto no-repeat; }
+    .prizes-list-panel .prize .prize-name {
+      position: relative;
+      flex: 1 1 auto;
+      height: 60px; }
+    .prizes-list-panel .prize .prize-name-txt {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      transform: translateY(-50%);
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; }
+    .prizes-list-panel .prize .prize-others {
+      position: relative;
+      margin-top: 10px; }
+      .prizes-list-panel .prize .prize-others .prize-d {
+        font-size: 12px;
+        color: #999; }
+      .prizes-list-panel .prize .prize-others .prize-b {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #fff;
+        background-color: #c44153; }
+  .prizes-list-panel .back-btn {
+    display: block;
+    width: 100%;
+    line-height: 50px;
+    font-size: 18px;
+    color: #2b99ff;
+    text-align: center;
+    text-decoration: none;
+    -webkit-tap-highlight: none;
+    background-color: #fff; }
+
+/*# sourceMappingURL=prizes.css.map */

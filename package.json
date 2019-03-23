@@ -1,0 +1,19 @@
+{
+  "name": "sort",
+  "version": "1.0.0",
+  "description": "01. <a href=\"#bubbleSort\">冒泡排序(bubbleSort)</a> 02. <a href=\"#quickSort\">快速排序(quickSort)</a> 03. <a href=\"#selectionSort\">选择排序(selectionSort)</a> 04. <a href=\"#heapSort\">堆排序(heapSort)</a> 05. <a href=\"#insertionSort\">插入排序(insertionSort)</a> 06. <a href=\"#shellSort\">希尔排序(shellSort)</a> 07. <a href=\"#mergeSort\">归并排序(mergeSort)</a> 08. <a href=\"#shakerSort\">摇摆排序(shakerSort)</a> 09. <a href=\"#bogoSort\">猴子排序(bogoSort)</a> 10. <a href=\"#bucketSort\">桶排序(bucketSort)</a> 11. <a href=\"#radixSort\">基数排序(radixSort)</a>",
+  "main": "sort.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwucong/sort.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwucong/sort/issues"
+  },
+  "homepage": "https://github.com/jwucong/sort#readme"
+}
